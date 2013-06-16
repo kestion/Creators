@@ -1,26 +1,36 @@
 <?php
 
+ session_start(); 
+
 	$base_dir = getcwd();
-	
-	if (isset($_GET['param']))
-		$param = $_GET['param'];
-	
-	include 'interactions/form.php';
-	
+
 	$link = mysql_connect('localhost', 'root', '');
 	if (!$link) {
 	   die('Impossible de se connecter : ' . mysql_error());
 	}
 
-	// Rendre la base de données foo, la base courante
 	$db_selected = mysql_select_db('creators', $link);
 	if (!$db_selected) {
 	   die ('Impossible de sélectionner la base de données : ' . mysql_error());
 	}
 	
+	if (isset($_GET['action']))
+		$action = $_GET['action'];
+	else
+		$action = '';
+	
+	include 'functions.php';
+	
+	if(isset($_SESSION['user_is']) && $_SESSION['user_is'] == 1)
+	{
+		$header=getHeader($_SESSION['user_name']);
+		$nav=getNav($_SESSION['user_name']);
+	}
+	
 	if (isset($_GET['page']))
 		$page = $_GET['page'];
 	
+	var_dump($_SESSION);
 	
 	include 'views/main.php';
 

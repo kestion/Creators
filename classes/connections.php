@@ -1,18 +1,26 @@
 <?php
-
-	if($param == 'register')
+	function loginForm()
 	{
-		$errors = registerForm();
-	}
-	
-	function checkEmail($email){
-		//check email format
-		if (filter_var($email, FILTER_VALIDATE_EMAIL) == $email){
-			//check if the domain has MX entries
-			$aux = explode('@',$email);
-			return checkdnsrr($aux[1],'MX');
+		if(isset($_POST['login']) && isset($_POST['psswd']))
+		{
+			$login = mysql_real_escape_string($_POST['login']);
+			$psswd = mysql_real_escape_string($_POST['psswd']);
+			
+			$q = 'SELECT * FROM users WHERE login LIKE "'.$login.'" AND password LIKE "'.$psswd.'"';
+			$res = mysql_query($q)OR die(mysql_error());
+			$user = mysql_fetch_row($res);
+			
+			if($user == true)
+			{
+				$_SESSION['user_is'] = 1;
+				$_SESSION['user_id'] = $user[0];
+				$_SESSION['user_name'] = $user[1];
+			}
+			
+			return $user;
 		}
-		return false;
+		else
+			return false;
 	}
 	
 	function registerForm()
@@ -56,6 +64,7 @@
 		if(empty($errors))
 		{
 			db_register($login, $psswd, $email);
+			make_website($login);
 		}
 		else
 			return $errors;	
@@ -81,4 +90,46 @@
 			return false;
 	}
 
+	function disconnect()
+	{
+		$_SESSION = array();
+		session_destroy(); 
+	}
+	
+	function make_website($login)
+	{
+			$dir_path = 'users/'.$login;
+			$index_path = $dir_path.'/index.php';
+			$main_path = $dir_path.'/main.php';
+			
+			$index_txt = '<?php include \'main.php\'; ?>';
+			$main_txt = '
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>'.$login.'</title>
+		<link rel="stylesheet" type="text/css" href="../../assets/css/style.css">
+		<script src="../../assets/js/jquery.js" type="text/javascript"></script>
+		<script src="../../assets/js/script.js" type="text/javascript"></script>
+	</head>
+
+	<body>
+		Hey babe!
+	</body>
+
+</html>';
+			
+			mkdir($dir_path, 0700);
+			
+			$handle = fopen($index_path, "w");
+			fwrite($handle, $index_txt);
+			fclose($handle);
+			
+			$handle = fopen($main_path, "w");
+			fwrite($handle, $main_txt);
+			fclose($handle);
+	}
+	
 ?>

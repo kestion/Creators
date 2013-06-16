@@ -1,3 +1,4 @@
-#register_form{display:none;}
-#register{cursor:pointer;}
-#register:hover{color:pink;}
+#register_form, #login_form{display:none;}
+#register, #login{cursor:pointer;}
+#register:hover, #login:hover{color:pink;}
+header, nav, article, footer{border:1px solid #000; margin:50px; padding:15px;}

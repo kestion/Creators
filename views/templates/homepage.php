@@ -1,2 +1,3 @@
+<h2>Great title</h2>
 
-HOMEPAGE
+<p>Lorem ipsum dolores sit amet...</p>

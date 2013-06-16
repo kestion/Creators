@@ -1,0 +1,1 @@
+<p><a href="index.php?action=disconnect">Disconnect</a></p>
