@@ -99,8 +99,14 @@
 	function make_website($login)
 	{
 			$dir_path = 'users/'.$login;
+			$template_path = $dir_path.'/views';
+			$media_path = $dir_path.'/media';
+			
 			$index_path = $dir_path.'/index.php';
 			$main_path = $dir_path.'/main.php';
+			$header_path = $template_path.'/header.html';
+			$nav_path = $template_path.'/nav.html';
+			$footer_path = $template_path.'/footer.html';
 			
 			$index_txt = '<?php include \'main.php\'; ?>';
 			$main_txt = '
@@ -116,12 +122,16 @@
 	</head>
 
 	<body>
-		Hey babe!
+		<?php include "views/header.html" ?>
+		<?php include "views/nav.html" ?>
+		<?php include "views/footer.html" ?>
 	</body>
 
 </html>';
 			
 			mkdir($dir_path, 0700);
+			mkdir($template_path, 0700);
+			mkdir($media_path, 0700);
 			
 			$handle = fopen($index_path, "w");
 			fwrite($handle, $index_txt);
@@ -129,6 +139,15 @@
 			
 			$handle = fopen($main_path, "w");
 			fwrite($handle, $main_txt);
+			fclose($handle);
+			
+			$handle = fopen($header_path, "w");
+			fclose($handle);
+			
+			$handle = fopen($nav_path, "w");
+			fclose($handle);
+			
+			$handle = fopen($footer_path, "w");
 			fclose($handle);
 	}
 	

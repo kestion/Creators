@@ -56,6 +56,31 @@
 				$res =$errors;
 			else
 			{
+				$header_path = 'users/'.$_SESSION['user_name'].'/views/header.html';
+				$footer_path = 'users/'.$_SESSION['user_name'].'/views/footer.html';
+				
+				$size = explode('x', $header['size']);
+				$header_txt = '
+	<header style="width:'.$size[0].'px; height:'.$size[1].'px; line-height:'.$size[1].'px; background:#'.$header['background'].'; font-style:'.$header['font_style'].'; font-size:'.$header['font_size'].'px; color:#'.$header['color'].';">
+		<p style="float:'.$header['title_pos'].';">
+			'.$header['title'].'
+		</p>
+		<div class="clear"> </div>
+	</header>';
+	
+				$footer_txt = '
+	<footer style="width:'.$size[0].'px; text-align:center; line-height:50px; height:50px; background:#'.$header['background'].'; font-style:'.$header['font_style'].'; font-size:'.$header['font_size'].'px; color:#'.$header['color'].';">
+		<p>www.creators.com</p>
+	</footer>'; 
+			 
+				$handle = fopen($header_path, "w");
+				fwrite($handle, $header_txt);
+				fclose($handle);
+				
+				$handle = fopen($footer_path, "w");
+				fwrite($handle, $footer_txt);
+				fclose($handle);
+			
 				db_insert($header, 'headers');	
 				$res = true;
 			}
@@ -66,7 +91,7 @@
 			return false;
 	}
 
-		function createNav()
+	function createNav()
 	{
 		if(isset($_POST) && !empty($_POST))
  		{
@@ -83,7 +108,39 @@
 				$res =$errors;
 			else
 			{
+				$nav_path = 'users/'.$_SESSION['user_name'].'/views/nav.html';
 				db_insert($nav, 'pages');	
+				
+				$q = 'SELECT * FROM pages WHERE id_user = "'.$_SESSION['user_id'].'"';
+				$res = mysql_query($q)OR die(mysql_error());
+				
+				$index = 0;
+				while($row = mysql_fetch_assoc($res)) // loop to give you the data in an associative array so you can use it however.
+				{
+				     $rows[$index] = $row;
+				     $index++;
+				}
+				
+				$i =0;
+				$titles = array();
+				foreach($rows as $v)
+					{
+						$titles[$i] = '<li style="display:inline;">'.$v['title'].'</li>';
+						$i++;
+					}
+				$nav_li= implode('', $titles);
+			
+				$nav_txt = '
+				<nav>
+					<ul style="width:100%; padding:0;">
+							'.$nav_li.'
+					</ul>
+				</nav>';
+					
+				$handle = fopen($nav_path, "w");
+				fwrite($handle, $nav_txt);
+				fclose($handle);
+					
 				$res = true;
 			}
 			

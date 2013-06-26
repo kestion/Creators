@@ -20,8 +20,6 @@
 			<?php
 	
 		}
-		else
-		{
 			?>
 				<form action="?page=userpage&action=nav" method="post" id="create_nav">
 					<label for="title">Title:</label>
@@ -30,9 +28,9 @@
 						if(isset($nav_res['title']))
 							echo '<p style="color:red;">'.$nav_res['title'].'</p>';
 					?>
-					<input type="submit" value="create header" />
+					<input type="submit" value="create page" />
 				</form>
 			<?php
-		}
+		
 		?>
 	

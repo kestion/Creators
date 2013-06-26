@@ -10,3 +10,5 @@
 	
 <h3>Your footer :</h3>
 	<?php include 'views/modules/footers.php'; ?>
+	
+<h2>See your pages <a href="index.php?page=pages">here</a></h2>
